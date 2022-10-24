@@ -1,9 +1,9 @@
 import React from 'react';
 
 import './static/css/global.css'
-import { createDate } from './utils/helpers/date/createDate';
+import { createYear } from './utils/helpers/date/createYear';
 
-console.log('createDate', createDate({locale: 'en-US'}))
+console.log('createDate', createYear({locale: 'en-US'}).createYearMonthes())
 
 export const App: React.FC = () => <div className='app__container'>calendar</div>
 
