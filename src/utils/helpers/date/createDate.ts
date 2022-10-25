@@ -25,7 +25,7 @@ export const createDate = (params?: CreateDateParams) => {
 
 
     return {
-    d,
+    date: d,
     dayNumber,
     day,
     dayNumberInWeek,
