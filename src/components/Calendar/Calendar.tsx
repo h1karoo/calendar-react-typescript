@@ -5,11 +5,11 @@ interface CalendarProps {
     locale?: string;
     selectedDate: Date;
     selectDate: (date: Date) => void;
-    firstWeekDay?: number;
+    firstWeekDayNumber?: number;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({firstWeekDay = 2,locale = 'default', selectedDate, selectDate}) => {
-    const {} = useCalendar({firstWeekDay, locale, selectedDate})
+export const Calendar: React.FC<CalendarProps> = ({firstWeekDayNumber = 2,locale = 'default', selectedDate, selectDate}) => {
+    const {} = useCalendar({firstWeekDayNumber, locale, selectedDate})
     return (
         <div>Calendar</div>
     )
