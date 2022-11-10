@@ -9,7 +9,8 @@ interface CalendarProps {
 }
 
 export const Calendar: React.FC<CalendarProps> = ({firstWeekDayNumber = 2,locale = 'default', selectedDate, selectDate}) => {
-    const {} = useCalendar({firstWeekDayNumber, locale, selectedDate})
+    const {state} = useCalendar({firstWeekDayNumber, locale, selectedDate})
+    console.log('state', state)
     return (
         <div>Calendar</div>
     )

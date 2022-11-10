@@ -8,6 +8,11 @@ interface UseCalendarParams {
     firstWeekDayNumber?: number;
 }
 
+const getYearsInterval = (year:number) => {
+    const startYear = Math.floor(year/10) * 10
+    return[...Array(10)].map((_, index) => startYear + index)
+}
+
 export const useCalendar = ({
     firstWeekDayNumber = 2,
     locale = 'default',
@@ -18,6 +23,7 @@ export const useCalendar = ({
     const [selectedMonth, setSelectedMonth] = React.useState(createMonth({ date:new Date(selectedDate.year, selectedDate.monthIndex), locale }))
 
     const [selectedYear, setSelectedYear] = React.useState(selectedDate.year);
+    const [selectedYearInterval, setSelectedYearInterval] = React.useState(getYearsInterval(selectedDate.year));
 
     const monthesNames = React.useMemo(() => getMonthesNames(locale), []);
     const weekDaysNames = React.useMemo(() => getWeekDaysNames(firstWeekDayNumber, locale), []);
@@ -49,12 +55,38 @@ export const useCalendar = ({
         const numberOfNextDays = 7 - lastDay.dayNumberInWeek + shiftIndex > 6 ? 7 - lastDay.dayNumberInWeek - (7-shiftIndex) : 7 - lastDay.dayNumberInWeek + shiftIndex
         console.log ('numberOfNextDays', numberOfNextDays)
 
+        const totalCalendarDays = days.length + numberOfNextDays + numberOfPrevDays;
+
+        const result = []
+        
+        for (let i = 0; i < numberOfPrevDays; i+=1){
+            const inverted = numberOfPrevDays - i
+            result[i] = prevMonthDays[prevMonthDays.length - inverted];
+        }
+        for (let i = numberOfPrevDays; i < totalCalendarDays - numberOfNextDays; i+=1){
+            result[i] = days[i - numberOfPrevDays];
+        }
+        for (let i = totalCalendarDays - numberOfNextDays; i < totalCalendarDays; i+=1){
+            result[i] = nextMonthDays[i - totalCalendarDays + numberOfNextDays];
+        }
+        return result
     }, [
         selectedMonth.year,
         selectedMonth.monthIndex,
         selectedYear
         ])
-
-    return {};
+        console.log(calendarDays)
+    return {
+        state: {
+            mode,
+            calendarDays,
+            weekDaysNames,
+            monthesNames,
+            selectedDate,
+            selectedMonth,
+            selectedYear,
+            selectedYearInterval
+        }
+    };
 };
 
