@@ -2,6 +2,7 @@ import React from "react";
 import { useCalendar } from "./hooks/useCalendar";
 
 import './Calendar.css'
+import { checkDateIsEqual, checkIsToday } from "../../utils/helpers/date";
 
 interface CalendarProps {
     locale?: string;
@@ -34,6 +35,37 @@ export const Calendar: React.FC<CalendarProps> = ({firstWeekDayNumber = 2,locale
                     </div>
                 )}
                 <div aria-hidden className="calendar__header__arrow__right" />
+            </div>
+            <div className="calendar__body">
+                {state.mode === 'days' && (
+                    <>
+                        <div className='calendar__week__names'>
+                        {state.weekDaysNames.map((weekDaysName) => (
+                            <div key={weekDaysName.dayShort}>{weekDaysName.dayShort}</div>
+                        ))}
+                        </div>
+                        <div className="calendar__days">{
+                            state.calendarDays.map(day => {
+                                const isToday = checkIsToday(day.date)
+                                const isSelectedDay = checkDateIsEqual(day.date, state.selectedDate.date)
+                                const isAdditionalDay = day.monthIndex !== state.selectedMonth.monthIndex
+
+                                return <div aria-hidden key={`${day.dayNumber} - ${day.monthIndex}`}
+                                onClick = {() => {
+                                    functions.setSelectedDay(day)
+                                    selectDate(day.date);
+                                }} 
+                                className={['calendar__day',
+                                isToday ? 'calendar__today__item' : '',
+                                isSelectedDay? 'calendar__selected__item' : '',
+                                isAdditionalDay? 'calendar__additional__day' : ''
+                                ].join(' ')}>
+                                    {day.dayNumber}
+                                </div>
+                            })
+                        }</div>
+                    </>
+                )}
             </div>
         </div>
     )

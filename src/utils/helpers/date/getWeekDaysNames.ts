@@ -1,6 +1,6 @@
 import { createDate } from './createDate';
 
-export const getWeekDaysNames = (firstWeekDay: number = 1, locale: string = 'default') => {
+export const getWeekDaysNames = (firstWeekDay: number = 4, locale: string = 'default') => {
   const weekDaysNames: {
     day: ReturnType<typeof createDate>['day'];
     dayShort: ReturnType<typeof createDate>['dayShort'];
@@ -14,8 +14,8 @@ export const getWeekDaysNames = (firstWeekDay: number = 1, locale: string = 'def
       date: new Date(date.getFullYear(), date.getMonth(), date.getDate() + i)
     });
 
-        weekDaysNames[dayNumberInWeek - 1] = {day, dayShort}
-    });
+    weekDaysNames[dayNumberInWeek - 1] = { day, dayShort };
+  });
 
-    return [weekDaysNames.slice(firstWeekDay - 1), ...weekDaysNames.slice(0, firstWeekDay - 1)];
+  return [...weekDaysNames.slice(firstWeekDay - 1), ...weekDaysNames.slice(0, firstWeekDay - 1)];
 };

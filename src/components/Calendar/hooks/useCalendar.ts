@@ -88,7 +88,8 @@ export const useCalendar = ({
             selectedYearInterval
         },
         functions: {
-            setMode
+            setMode,
+            setSelectedDay,
         }
     };
 };
