@@ -1,3 +1,4 @@
+import { off } from "process";
 import React from "react";
 
 import { getMonthesNames, getWeekDaysNames, createMonth, createDate, getMonthNumberOfDays } from '../../../utils/helpers/date'
@@ -32,7 +33,7 @@ export const useCalendar = ({
     console.log('days', days);
 
     const calendarDays = React.useMemo(() => {
-        const monthNumberOfDays = getMonthNumberOfDays(selectedDate.monthIndex, selectedYear)
+        const monthNumberOfDays = getMonthNumberOfDays(selectedMonth.monthIndex, selectedYear)
         console.log('monthNumberOfDays', monthNumberOfDays);
         const prevMonthDays = createMonth({
             date: new Date(selectedYear, selectedMonth.monthIndex - 1),
@@ -76,6 +77,26 @@ export const useCalendar = ({
         selectedYear
         ])
         console.log(calendarDays)
+
+        const onClickArrow = (direction: 'right' | 'left') => {
+            if (mode === 'days') {
+                const monthIndex = direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1;
+
+                if(monthIndex === -1){
+                    const year = selectedYear - 1
+                    setSelectedYear(year);
+                    if(selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+                    return setSelectedMonth(createMonth({date: new Date(year, 11), locale}));
+                }
+                if(monthIndex === 12){
+                    const year = selectedYear + 1
+                    setSelectedYear(year);
+                    if(selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year))
+                    return setSelectedMonth(createMonth({date: new Date(year, 0), locale}));
+                }
+                setSelectedMonth(createMonth({date: new Date(selectedYear, monthIndex), locale}))
+            }
+        };
     return {
         state: {
             mode,
@@ -90,6 +111,7 @@ export const useCalendar = ({
         functions: {
             setMode,
             setSelectedDay,
+            onClickArrow,
         }
     };
 };
