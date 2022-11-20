@@ -65,9 +65,59 @@ export const Calendar: React.FC<CalendarProps> = ({firstWeekDayNumber = 2,locale
                                 ].join(' ')}>
                                     {day.dayNumber}
                                 </div>
-                            })
-                        }</div>
+                            })}
+                        </div>
                     </>
+                )}
+                {state.mode === 'monthes' && (
+                    <div className="calendar__pick__items__container">
+                        {state.monthesNames.map(monthesName => {
+                            const isCurrentMonth = 
+                            new Date().getMonth() === monthesName.monthIndex &&
+                            new Date().getFullYear() === state.selectedYear
+                            const isSelectedMonth = monthesName.monthIndex === state.selectedMonth.monthIndex
+
+                            return (
+                                <div
+                                aria-hidden
+                                onClick={() => {
+                                    functions.setSelectedMonthByIndex(monthesName.monthIndex)
+                                    functions.setMode('days');
+                                }}
+                                className={['calendar__pick__item',
+                                isCurrentMonth ? 'calendar__today__item' : '',
+                                isSelectedMonth? 'calendar__selected__item' : '',
+                                ].join(' ')}>
+                                    {monthesName.monthShort}
+                                </div>
+                            )
+                        })}
+                    </div>
+                )}
+                {state.mode === 'years' && (
+                    <div className="calendar__pick__items__container">
+                        <div className="calendar__unchoosable__year">{state.selectedYearInterval[0] - 1}</div>
+                        {state.selectedYearInterval.map(year => {
+                            const isCurrentYear = new Date().getFullYear() === year;
+                            const isSelectedYear = year === state.selectedYear;
+
+                            return (
+                                <div
+                                aria-hidden
+                                onClick={() => {
+                                    functions.setSelectedYear(year)
+                                    functions.setMode('monthes');
+                                }}
+                                className={['calendar__pick__item',
+                                isCurrentYear? 'calendar__today__item' : '',
+                                isSelectedYear? 'calendar__selected__item' : '',
+                                ].join(' ')}>
+                                    {year}
+                                </div>
+                            )
+                        })}
+                        <div className="calendar__unchoosable__year">{state.selectedYearInterval[state.selectedYearInterval.length - 1] + 1}</div>
+                    </div>
                 )}
             </div>
         </div>

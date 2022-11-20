@@ -79,6 +79,25 @@ export const useCalendar = ({
         console.log(calendarDays)
 
         const onClickArrow = (direction: 'right' | 'left') => {
+
+            if(mode === 'years' && direction === 'left'){
+                return setSelectedYearInterval(getYearsInterval(selectedYearInterval[0] - 10))
+            }
+            if(mode === 'years' && direction === 'right'){
+                return setSelectedYearInterval(getYearsInterval(selectedYearInterval[0] + 10))
+            }
+
+            if(mode === 'monthes' && direction === 'left'){
+                const year = selectedYear - 1;
+                if(selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year));
+                return setSelectedYear(year);
+            }
+            if(mode === 'monthes' && direction === 'right'){
+                const year = selectedYear + 1;
+                if(selectedYearInterval.includes(year)) setSelectedYearInterval(getYearsInterval(year));
+                return setSelectedYear(year);
+            }
+
             if (mode === 'days') {
                 const monthIndex = direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1;
 
@@ -97,6 +116,11 @@ export const useCalendar = ({
                 setSelectedMonth(createMonth({date: new Date(selectedYear, monthIndex), locale}))
             }
         };
+
+        const setSelectedMonthByIndex = (monthIndex: number) => {
+            setSelectedMonth(createMonth({date: new Date(selectedYear, monthIndex), locale }))
+        }
+
     return {
         state: {
             mode,
@@ -112,6 +136,8 @@ export const useCalendar = ({
             setMode,
             setSelectedDay,
             onClickArrow,
+            setSelectedMonthByIndex,
+            setSelectedYear,
         }
     };
 };
